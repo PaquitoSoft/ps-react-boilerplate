@@ -10,7 +10,9 @@ const defaultState = {
 	isLoading: false,
 	currentRequest: {},
 	currentPageData: {},
-	navigationError: undefined
+	repos: [],
+	repoDetails: {},
+	appError: undefined
 };
 
 let middleware = [ thunkMiddleware, analyticsMiddleware, ajaxActionsMiddleware ];

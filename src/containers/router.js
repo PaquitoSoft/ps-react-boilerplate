@@ -17,6 +17,10 @@ class Router extends React.Component {
 		Object.keys(this.props.config).forEach(routePath => {
 			routerEngine(routePath, this.handleRouteChange.bind(this, this.props.config[routePath]));
 		});
+
+		routerEngine('*', (ctx) => {
+			console.warn('Route not handled:', ctx);
+		});
 	}
 
 	static navTo(url) {
@@ -31,8 +35,8 @@ class Router extends React.Component {
 			require(`bundle!../${pageModulePath}`)(pageModule => {
 				const PageComponent = pageModule.default;
 
-				
-				this.props.navigate(routeContext, PageComponent.loadPageData.bind(null, routeContext))
+				console.log('------>', this.props);
+				this.props.dispatch(navigate(routeContext, PageComponent.loadPageData.bind(null, routeContext, this.props.dispatch)))
 					.then(pageData => {
 						this.setState({
 							currentComponent: PageComponent
@@ -72,6 +76,7 @@ class Router extends React.Component {
 	}
 
 	render() {
+		console.info('--======>', this.props);
 		if (!this.state.currentComponent) {
 			return (<div></div>);
 		} else {
@@ -96,6 +101,4 @@ Router.propTypes = {
 	config: React.PropTypes.object.isRequired
 };
 
-export default connect(()=>({}), {
-	navigate
-})(Router);
+export default connect()(Router);

@@ -1,0 +1,14 @@
+.repos-list {
+	.repo-summary {
+		list-style: none;
+
+		.repo-stars {
+			margin-left: 15px;
+
+			.repo-stars-count {
+				margin-left: 5px;
+				font-weight: bold;
+			}
+		}
+	}
+}

@@ -1,3 +1,5 @@
+import { AJAX_REQUEST, AJAX_ERROR } from '../actions/types';
+
 function ajaxActionsMiddleware({ dispatch, getState }) {
 	return next => action => { // eslint-disable-line
 		const {
@@ -31,10 +33,10 @@ function ajaxActionsMiddleware({ dispatch, getState }) {
 		] = types;
 
 		dispatch({
-			type: requestType,
-			payload: {
-				request: payload.request
-			}
+			type: AJAX_REQUEST
+			// payload: {
+			// 	request: payload.request
+			// }
 		});
 
 		return callAPI()
@@ -46,7 +48,7 @@ function ajaxActionsMiddleware({ dispatch, getState }) {
 			})
 			.catch(err => {
 				dispatch(Object.assign({}, {
-					type: successType,
+					type: AJAX_ERROR,
 					payload: { error: err }
 				}));
 			});

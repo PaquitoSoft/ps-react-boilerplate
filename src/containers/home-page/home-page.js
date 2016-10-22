@@ -1,19 +1,21 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { getTrendingRepos } from '../../api/github';
+import { searchRepos } from '../../actions/';
 import ReposList from '../../components/repos-list';
 
 import './home-page.css';
 
 export class HomePage extends React.Component {
 
-	static loadPageData() {
-		return getTrendingRepos();
+	static loadPageData(requestContext, dispatch) {
+		return dispatch(searchRepos());
 	}
 
 	searchRepos(event) {
 		event.preventDefault();
 		console.info('Search for:', this.searchInput.value);
+		this.props.searchRepos(this.searchInput.value);
 	}
 
 	render() {
@@ -44,8 +46,8 @@ HomePage.propTypes = {
 
 function mapStateToProps(state) {
 	return { 
-		repos: state.currentPageData.items
+		repos: state.repos
 	}
 }
 
-export default connect(mapStateToProps)(HomePage);
+export default connect(mapStateToProps, { searchRepos })(HomePage);
