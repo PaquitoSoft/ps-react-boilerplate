@@ -2,20 +2,17 @@ import { createStore as createReduxStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import createLogger from 'redux-logger';
 import rootReducer from './reducers';
-import ajaxActionsMiddleware from './middleware/ajax-actions';
 import analyticsMiddleware from './middleware/analytics';
 
 const defaultState = {
-	appName: 'Paquitosoft ReactJS starter kit',
+	appTitle: 'Paquitosoft ReactJS starter kit',
 	isLoading: false,
-	currentRequest: {},
-	currentPageData: {},
 	repos: [],
 	repoDetails: {},
 	appError: undefined
 };
 
-let middleware = [ thunkMiddleware, analyticsMiddleware, ajaxActionsMiddleware ];
+let middleware = [ thunkMiddleware, analyticsMiddleware ];
 
 if (process.env.NODE_ENV !== 'production') {
 	middleware.push(createLogger());

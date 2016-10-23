@@ -11,11 +11,10 @@ export class App extends React.Component {
 		return (
 			<div className="app-root">
 				<div className="header">
-					<h2>PaquitoSoft ReactJS boilerplate</h2>
-					{this.props.isLoading ?
+					<h2>{this.props.appTitle}</h2>
+					{
+						this.props.isLoading &&
 						<div className="loader">Loading...</div>
-						:
-						null
 					}
 				</div>
 				<div className="body">
@@ -24,9 +23,13 @@ export class App extends React.Component {
 			</div>
 		);
 	}
-
 }
 
-export default connect(state => {
-	return { isLoading: state.isLoading }
-})(App);
+function mapStateToProps(state) {
+	return {
+		appTitle: state.appTitle,
+		isLoading: state.isLoading
+	}
+}
+
+export default connect(mapStateToProps)(App);

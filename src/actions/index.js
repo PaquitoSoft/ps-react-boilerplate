@@ -13,10 +13,10 @@ import { getTrendingRepos, getRepoDetails } from '../api/github';
 function ajaxAction(config) {
 	return dispatch => {
 		dispatch({
-			type: actionTypes.AJAX_REQUEST
-			// meta: {
-			// 	ajaxStatus: constants.AJAX_STATUS_REQUEST
-			// }
+			type: actionTypes.AJAX_REQUEST,
+			meta: Object.assign({
+				action: config.type
+			}, config.meta)
 		});
 
 		return new Promise((resolve, reject) => {		
@@ -34,9 +34,6 @@ function ajaxAction(config) {
 				.catch(error => {
 					dispatch({
 						type: actionTypes.AJAX_ERROR,
-						// meta: {
-						// 	ajaxStatus: constants.AJAX_STATUS_ERROR
-						// },
 						payload: {
 							error
 						}
@@ -44,25 +41,6 @@ function ajaxAction(config) {
 					reject(error);
 				});
 		});
-	};
-}
-
-export function navigate(routeContext, loader) {
-	const request = {
-		pathname: routeContext.pathname,
-		path: routeContext.path,
-		params: routeContext.params,
-		queryString: routeContext.querystring
-	}
-
-	return {
-		types: [ 
-			actionTypes.NAVIGATION_REQUEST,
-			actionTypes.NAVIGATION_SUCCESS, 
-			actionTypes.NAVIGATION_ERROR 
-		],
-		callAPI: loader,
-		payload: { request }
 	};
 }
 
@@ -86,42 +64,17 @@ export function navigationError(error) {
 }
 
 export function searchRepos(topic) {
-	// return (dispatch) => {
-	// 	dispatch({
-	// 		type: actionTypes.SEARCH_REPOS,
-	// 		meta: {
-	// 			status: constants.ACTION_STATUS_REQUEST
-	// 		}
-	// 	});
-
-	// 	return getTrendingRepos(topic)
-	// 		.then(data => {
-	// 			dispatch({
-	// 				type: actionTypes.SEARCH_REPOS,
-	// 				meta: {
-	// 					status: constants.ACTION_STATUS_SUCCESS
-	// 				},
-	// 				payload: {
-	// 					repos: data.items
-	// 				}
-	// 			});
-	// 		})
-	// 		.catch(error => {
-	// 			dispatch({
-	// 				type: actionTypes.SEARCH_REPOS,
-	// 				meta: {
-	// 					status: constants.ACTION_STATUS_ERROR
-	// 				},
-	// 				payload: {
-	// 					error
-	// 				}
-	// 			});
-	// 		});
-
-	// }
+	let meta = {};
+	if (topic) {
+		meta.analytics = {
+			event: 'search-repo',
+			value: topic 
+		};
+	}
 
 	return ajaxAction({
 		type: actionTypes.SEARCH_REPOS,
+		meta,
 		fetchOperation: () => getTrendingRepos(topic),
 		successPayload: (data) => ({ repos: data.items })
 	});
@@ -129,40 +82,6 @@ export function searchRepos(topic) {
 }
 
 export function repoDetails(repoName) {
-	// return dispatch => {
-	// 	dispatch({
-	// 		type: actionTypes.REPO_DETAILS,
-	// 		meta: {
-	// 			status: constants.ACTION_STATUS_REQUEST
-	// 		}
-	// 	});
-
-	// 	return getRepoDetails(repoName)
-	// 		.then(data => {
-	// 			dispatch({
-	// 				type: actionTypes.REPO_DETAILS,
-	// 				meta: {
-	// 					status: constants.ACTION_STATUS_SUCCESS
-	// 				},
-	// 				payload: {
-	// 					repoDetails: data
-	// 				}
-	// 			});
-	// 		})
-	// 		.catch(error => {
-	// 			dispatch({
-	// 				type: actionTypes.REPO_DETAILS,
-	// 				meta: {
-	// 					status: constants.ACTION_STATUS_SUCCESS
-	// 				},
-	// 				payload: {
-	// 					repos: data.items
-	// 				}
-	// 			});
-	// 		});
-
-	// };
-
 	return ajaxAction({
 		type: actionTypes.REPO_DETAILS,
 		fetchOperation: () => getRepoDetails(repoName),

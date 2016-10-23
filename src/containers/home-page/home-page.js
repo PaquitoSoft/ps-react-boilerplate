@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { getTrendingRepos } from '../../api/github';
 import { searchRepos } from '../../actions/';
+import Router from '../router';
 import ReposList from '../../components/repos-list';
 
 import './home-page.css';
@@ -9,19 +10,26 @@ import './home-page.css';
 export class HomePage extends React.Component {
 
 	static navigationAction(requestContext) {
-		return searchRepos();
+		console.info('Home Page request context:', requestContext);
+		const topic = requestContext.querystring.match(/^q=(.*)$/);
+
+		return searchRepos(topic ? topic[1] : undefined);
+	}
+
+	constructor(props) {
+		super(props);
+		this.searchRepos = this.searchRepos.bind(this);
 	}
 
 	searchRepos(event) {
 		event.preventDefault();
-		console.info('Search for:', this.searchInput.value);
-		this.props.searchRepos(this.searchInput.value);
+		Router.navTo(`/?q=${this.searchInput.value}`);
 	}
 
 	render() {
 		return (
 			<div className="home-page">
-				<form onSubmit={this.searchRepos.bind(this)}>
+				<form onSubmit={this.searchRepos}>
 					<input
 						type="text"
 						autoFocus="true"

@@ -32,7 +32,7 @@ class Router extends React.Component {
 		console.debug('handleRouteChange# Navigating to:', pageModulePath, routeContext);
 	
 		// TODO Add a loader so the user knows we're doing something
-		this.props.dispatch(navigationStart());
+		// this.props.dispatch(navigationStart());
 
 		require.ensure([], require => {
 			require(`bundle!../${pageModulePath}`)(pageModule => {
@@ -44,13 +44,13 @@ class Router extends React.Component {
 						this.setState({
 							currentComponent: PageComponent
 						}, () => {
-							this.props.dispatch(navigationSuccess());
+							// this.props.dispatch(navigationSuccess());
 						});
 					})
 					.catch((error) => {
 						console.error('handleRouteChange# Navigation error:', error);
 						console.error(error.stack);
-						this.props.dispatch(navigationError(error));
+						// this.props.dispatch(navigationError(error));
 					});
 
 				// this.props.dispatch(navigate(routeContext, PageComponent.loadPageData.bind(null, routeContext, this.props.dispatch)))

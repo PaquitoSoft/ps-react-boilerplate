@@ -11,6 +11,16 @@ export class DetailPage extends React.Component {
 		return repoDetails(requestContext.params.repoName.replace('-', '/'));
 	}
 
+	constructor(props) {
+		super(props);
+		this.backToHome = this.backToHome.bind(this);
+	}
+
+	backToHome(event) {
+		event.preventDefault();
+		history.back();
+	}
+
 	render() {
 		const repo = this.props.repoDetails;
 		return (
@@ -33,7 +43,7 @@ export class DetailPage extends React.Component {
 				</p>
 				<br/>
 				<p>
-					<a href="/">Back to Home page</a>
+					<a href="/" onClick={this.backToHome} target="_self">Back to Home page</a>
 				</p>
 			</div>
 		);
