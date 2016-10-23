@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { navigate } from '../actions/';
 import routerEngine from 'page';
+import { navigationStart, navigationSuccess, navigationError } from '../actions/';
+import * as constants from '../constants';
 
 class Router extends React.Component {
 
@@ -31,23 +32,42 @@ class Router extends React.Component {
 		console.debug('handleRouteChange# Navigating to:', pageModulePath, routeContext);
 	
 		// TODO Add a loader so the user knows we're doing something
+		this.props.dispatch(navigationStart());
+
 		require.ensure([], require => {
 			require(`bundle!../${pageModulePath}`)(pageModule => {
 				const PageComponent = pageModule.default;
 
-				console.log('------>', this.props);
-				this.props.dispatch(navigate(routeContext, PageComponent.loadPageData.bind(null, routeContext, this.props.dispatch)))
-					.then(pageData => {
+				this.props.dispatch(PageComponent.navigationAction.bind(null, routeContext)())
+				// this.props.dispatch(asyncAction())
+					.then(() => {
 						this.setState({
 							currentComponent: PageComponent
-							// routeContext,
-							// pageData
+						}, () => {
+							this.props.dispatch(navigationSuccess());
 						});
 					})
-					.catch(err => {
-						console.error('handleRouteChange# Navigation error:', err);
-						console.error(err.stack);
+					.catch((error) => {
+						console.error('handleRouteChange# Navigation error:', error);
+						console.error(error.stack);
+						this.props.dispatch(navigationError(error));
 					});
+
+				// this.props.dispatch(navigate(routeContext, PageComponent.loadPageData.bind(null, routeContext, this.props.dispatch)))
+				// 	.then(pageData => {
+				// 		this.setState({
+				// 			currentComponent: PageComponent
+				// 			// routeContext,
+				// 			// pageData
+				// 		}, () => {
+				// 			this.props.dispatch(navigation('end'));
+				// 		});
+				// 	})
+				// 	.catch(err => {
+				// 		console.error('handleRouteChange# Navigation error:', err);
+				// 		console.error(err.stack);
+				// 		this.props.dispatch(navigation('end'));
+				// 	});
 
 				// PageComponent.loadPageData(routeContext)
 				// 	.then(pageData => {
@@ -76,7 +96,6 @@ class Router extends React.Component {
 	}
 
 	render() {
-		console.info('--======>', this.props);
 		if (!this.state.currentComponent) {
 			return (<div></div>);
 		} else {

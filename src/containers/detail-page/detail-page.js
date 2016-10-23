@@ -7,10 +7,8 @@ import './detail-page.css';
 
 export class DetailPage extends React.Component {
 
-	static loadPageData(requestContext, dispatch) {
-		console.info(requestContext);
-		// return getRepoDetails(requestContext.params.repoName.replace('-', '/'));
-		return dispatch(repoDetails(requestContext.params.repoName.replace('-', '/')));
+	static navigationAction(requestContext) {
+		return repoDetails(requestContext.params.repoName.replace('-', '/'));
 	}
 
 	render() {

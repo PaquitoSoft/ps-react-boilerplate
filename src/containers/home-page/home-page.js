@@ -8,8 +8,8 @@ import './home-page.css';
 
 export class HomePage extends React.Component {
 
-	static loadPageData(requestContext, dispatch) {
-		return dispatch(searchRepos());
+	static navigationAction(requestContext) {
+		return searchRepos();
 	}
 
 	searchRepos(event) {
