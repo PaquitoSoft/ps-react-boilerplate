@@ -1,11 +1,11 @@
-module.exports = {
+{
     "env": {
         "browser": true,
         "es6": true
     },
-	"plugins": [
-		"react"
-	],
+    "plugins": [
+        "react"
+    ],
     "extends": ["eslint:recommended", "plugin:react/recommended"],
     "parserOptions": {
         "ecmaFeatures": {
@@ -14,16 +14,14 @@ module.exports = {
         },
         "sourceType": "module"
     },
-	"globals": {
-		"zara": false,
-		"Mochat": false,
-		"process": false
-	},
+    "globals": {
+        "process": false
+    },
     "rules": {
-        "indent": [
-            "error",
-            "tab"
-        ],
+        # "indent": [
+        #     "error",
+        #     "tab"
+        # ],
         "linebreak-style": [
             "error",
             "unix"
@@ -37,4 +35,4 @@ module.exports = {
             "always"
         ]
     }
-};
+}

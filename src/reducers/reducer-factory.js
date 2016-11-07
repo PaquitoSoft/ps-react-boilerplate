@@ -5,7 +5,7 @@ class ReducerFactory {
 		this.actionsMap = {};
 	}
 
-	registerActionHandler(actionType, actionHandler) {
+	handleAction(actionType, actionHandler) {
 		this.actionsMap[actionType] = actionHandler;
 	}
 
@@ -13,16 +13,10 @@ class ReducerFactory {
 		return state;
 	}
 
-	createReducer() {
+	toStandardReducer() {
 		return (state = {}, action) => {
 			const handler = this.actionsMap[action.type] || this.defaultHandler;
-			let newState = handler(action, state) || state;
-
-			if (this.actionsMap['*']) {
-				newState = this.actionsMap['*'](action, state);
-			}
-
-			return newState;
+			return handler(action, state) || state;
 		};
 	}
 }

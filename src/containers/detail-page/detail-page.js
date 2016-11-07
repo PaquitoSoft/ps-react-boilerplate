@@ -1,14 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { browserHistory } from 'react-router';
 import { getRepoDetails } from '../../api/github';
-import { repoDetails } from '../../actions/';
+import { repoDetails, loadMovieDetails } from '../../actions/';
 
 import './detail-page.css';
 
 export class DetailPage extends React.Component {
 
 	static navigationAction(requestContext) {
-		return repoDetails(requestContext.params.repoName.replace('-', '/'));
+    // return repoDetails(requestContext.routeParams.repoName.replace('-', '/'));
+    console.log('=====>', requestContext);
+    return loadMovieDetails(requestContext.routeParams.movieId);
 	}
 
 	constructor(props) {
@@ -16,30 +19,34 @@ export class DetailPage extends React.Component {
 		this.backToHome = this.backToHome.bind(this);
 	}
 
+  // componentDidMount() {
+  //   console.log(this.props);
+  //   this.props.repoLoader(this.props.routeParams.repoName.replace('-', '/'));
+  // }
+
 	backToHome(event) {
 		event.preventDefault();
-		history.back();
+		// browserHistory.goBack();
+    history.back()
 	}
 
 	render() {
-		const repo = this.props.repoDetails;
+    console.log('=====>', this.props);
+		// let repo = this.props.repoDetails;    
+		// repo.owner = repo.owner || {};
+    const movie = this.props.movie;
+		
 		return (
 			<div className="detail-page">
 				<p>
-					Repo name:
-					<span className="repo-name">{repo.name}</span>
+					Movie title:
+					<span className="repo-name">{movie.title}</span>
 				</p>
 				<p>
-					Author: <img src={repo.owner.avatar_url} />
+					<img src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} />
 				</p>				
 				<p>
-					Description: {repo.description}
-				</p>
-				<p>
-					<a href={repo.html_url} target="_blank">GitHub URL</a>
-				</p>
-				<p>
-					<a href={repo.homepage} target="_blank">Homepage</a>
+					Description: {movie.overview}
 				</p>
 				<br/>
 				<p>
@@ -52,8 +59,9 @@ export class DetailPage extends React.Component {
 
 function mapStateToProps(state) {
 	return {
-		repoDetails: state.repoDetails
+		repoDetails: state.repoDetails,
+    movie: state.movieDetails
 	};
 }
 
-export default connect(mapStateToProps)(DetailPage);
+export default connect(mapStateToProps, {repoLoader: repoDetails})(DetailPage);

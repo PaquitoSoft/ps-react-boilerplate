@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import routerEngine from 'page';
+// import routerEngine from 'page';
+import routerEngine from '../plugins/router-engine';
 import { navigationStart, navigationSuccess, navigationError } from '../actions/';
 import * as constants from '../constants';
 
@@ -34,11 +35,17 @@ class Router extends React.Component {
 		// TODO Add a loader so the user knows we're doing something
 		// this.props.dispatch(navigationStart());
 
-		require.ensure([], require => {
+		require.ensure([], require => { // eslint-disable-line
 			require(`bundle!../${pageModulePath}`)(pageModule => {
 				const PageComponent = pageModule.default;
 
-				this.props.dispatch(PageComponent.navigationAction.bind(null, routeContext)())
+        const reqContext = {
+          routeParams: routeContext.params,
+          queryStringParams: routeContext.querystring,
+          hash: routeContext.hash
+        };
+
+				this.props.dispatch(PageComponent.navigationAction(reqContext))
 				// this.props.dispatch(asyncAction())
 					.then(() => {
 						this.setState({
@@ -101,7 +108,7 @@ class Router extends React.Component {
 		} else {
 			// Scroll to top after transitioning to a new page
 			setTimeout(window.scrollTo.bind(window, 0, 0), 4);
-
+    
 			// Second parameter is props; Third parameter is children
 			return React.createElement(this.state.currentComponent, {
 				// request: {
@@ -113,6 +120,12 @@ class Router extends React.Component {
 				// pageData: this.state.pageData
 			});
 		}
+    
+    // return (
+    //   <div>
+    //     {this.state.currentComponent}
+    //   </div>
+    // );
 	}
 }
 

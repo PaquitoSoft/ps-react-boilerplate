@@ -5,8 +5,11 @@ import rootReducer from './reducers';
 import analyticsMiddleware from './middleware/analytics';
 
 const defaultState = {
-	appTitle: 'Paquitosoft ReactJS starter kit',
+  routing: {},
+  appTitle: 'Paquitosoft ReactJS starter kit',
 	isLoading: false,
+  moviesList: [],
+  movieDetails: {},
 	repos: [],
 	repoDetails: {},
 	appError: undefined

@@ -1,6 +1,7 @@
 import * as actionTypes from './types';
 import * as constants from '../constants';
 import { getTrendingRepos, getRepoDetails } from '../api/github';
+import { getTopRated, getMovieDetails } from '../api/tmdb';
 
 /*
 	@param config 
@@ -88,4 +89,20 @@ export function repoDetails(repoName) {
 		successPayload: (data) => ({ repoDetails: data })
 	});
 	
+}
+
+export function loadTopRated() {
+  return ajaxAction({
+    type: actionTypes.TOP_RATED_MOVIES,
+    fetchOperation: () => getTopRated(),
+    successPayload: data => ({ movies: data.results })
+  });
+}
+
+export function loadMovieDetails(movieId) {
+  return ajaxAction({
+    type: actionTypes.MOVIE_DETAILS,
+    fetchOperation: () => getMovieDetails(movieId),
+    successPayload: data => ({ details: data })
+  });
 }
