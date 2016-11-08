@@ -1,0 +1,19 @@
+@import "../vendor/semantic/components/reset.css",
+  "../vendor/semantic/components/site.css",
+  "../vendor/semantic/components/container.css",
+  "../vendor/semantic/components/grid.css",
+  "../vendor/semantic/components/header.css",
+  "../vendor/semantic/components/image.css",
+  "../vendor/semantic/components/menu.css",
+  "../vendor/semantic/components/divider.css",
+  "../vendor/semantic/components/list.css",
+  "../vendor/semantic/components/segment.css",
+  "../vendor/semantic/components/dropdown.css",
+  "../vendor/semantic/components/icon.css";
+
+.app-root {
+  .main.container {
+    margin-top: 7em;
+    max-width: 100% !important;
+  }
+}

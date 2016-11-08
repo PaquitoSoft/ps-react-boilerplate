@@ -1,10 +1,10 @@
-import App from '../containers/app';
+import App from '../components/app';
 
-export default Object.freeze({
-	// Route:page-component-path (Base path: /src/js/)
-	'/': 'containers/home-page/home-page',
-	'/repo/:repoName': 'containers/detail-page/detail-page'
-});
+// export default Object.freeze({
+// 	// Route:page-component-path (Base path: /src/js/)
+// 	'/': 'components/home-page/home-page',
+// 	'/repo/:repoName': 'containers/detail-page/detail-page'
+// });
 
 
 function createRouteConfig(path, componentPath, store) {
@@ -14,7 +14,7 @@ function createRouteConfig(path, componentPath, store) {
     getComponent(nextState, done) {
       console.log('Loading component:', componentPath);
       require.ensure([], require => { // eslint-disable-line
-        const Component = require(`../containers/${componentPath}`).default;
+        const Component = require(`../components/${componentPath}`).default;
 
         // const actions = [];
         // const reducer = (state) => state;
@@ -34,7 +34,10 @@ function createRouteConfig(path, componentPath, store) {
             console.info('Action dispatched. Rendering component...', componentPath);
             done(null, Component)
           })
-          .catch(done);
+          .catch(err => {
+            console.error('RoutesConfig::getComponent# Error dispatching navigation action:', err);
+            console.log(err.stack);
+          });
       });
     },
     onEnter(nextState, replace, callback) {

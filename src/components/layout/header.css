@@ -1,0 +1,5 @@
+.header {
+  .ui.menu .item > img:not(.ui) {
+      margin-right: 1.5em;
+  }
+}

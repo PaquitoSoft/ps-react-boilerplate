@@ -1,0 +1,7 @@
+@import "../../vendor/semantic/components/reveal.css";
+.movie-summary {
+  img {
+    width: 100%;
+    min-height: 175px;
+  }
+}
