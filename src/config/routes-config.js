@@ -68,9 +68,8 @@ export function getRoutes(store) {
   return {
 		component: App,
 		childRoutes: [
-			createRouteConfig('/', 'home-page/home-page', store),
-			createRouteConfig('/repo/:repoName', 'detail-page/detail-page', store),
-      createRouteConfig('/movie/:movieId/:slug', 'detail-page/detail-page', store)
+			createRouteConfig('/', 'home-page/home', store),
+			createRouteConfig('/movie/:movieId/:slug', 'movie-detail-page/movie-detail', store)
 		]
 	};
 }

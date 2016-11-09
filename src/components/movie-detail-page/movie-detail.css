@@ -1,0 +1,9 @@
+.movie-detail-page {
+  .movie-poster-section {
+    text-align: center;
+    img {
+      width: 100%;
+      border-radius: 0.28571429rem;
+    }
+  }
+}
