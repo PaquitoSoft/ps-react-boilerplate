@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { loadTopRated } from '../../actions/';
+import { loadMoviesList, loadTopRated } from '../../actions/';
 
 import MovieSummary from './movie-summary';
 
@@ -19,6 +19,7 @@ function HomePage({ movies }) {
 
 HomePage.navigationAction = function(requestContext) {
   console.log('HomePage::navigationAction:', requestContext);
+  // return loadMoviesList();
   return loadTopRated();
 };
 

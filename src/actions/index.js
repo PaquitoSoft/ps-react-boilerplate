@@ -1,7 +1,19 @@
 import * as actionTypes from './types';
 import * as constants from '../constants';
-import { getTrendingRepos, getRepoDetails } from '../api/github';
-import { getTopRated, getMovieDetails } from '../api/tmdb';
+// import { getTrendingRepos, getRepoDetails } from '../api/github';
+import * as tmdb from '../api/tmdb';
+
+export const MOVIES_FILTER_TOP_RATED = 'MOVIES_FILTER_TOP_RATED';
+export const MOVIES_FILTER_POPULAR = 'MOVIES_FILTER_POPULAR';
+export const MOVIES_FILTER_PREMIER = 'MOVIES_FILTER_PREMIER';
+export const MOVIES_FILTER_UPCOMING = 'MOVIES_FILTER_UPCOMING';
+
+const moviesLoaderMap = {
+  [constants.MOVIES_FILTER_TOP_RATED]: tmdb.getTopRated,
+  [constants.MOVIES_FILTER_POPULAR]: tmdb.getPopular,
+  [constants.MOVIES_FILTER_PREMIER]: tmdb.getPremiers,
+  [constants.MOVIES_FILTER_UPCOMING]: tmdb.getUpcoming,
+};
 
 /*
 	@param config 
@@ -16,7 +28,8 @@ function ajaxAction(config) {
 		dispatch({
 			type: actionTypes.AJAX_REQUEST,
 			meta: Object.assign({
-				action: config.type
+				action: config.type,
+				ajaxStatus: constants.AJAX_STATUS_REQUEST
 			}, config.meta)
 		});
 
@@ -35,6 +48,9 @@ function ajaxAction(config) {
 				.catch(error => {
 					dispatch({
 						type: actionTypes.AJAX_ERROR,
+						meta: {
+							ajaxStatus: constants.AJAX_STATUS_ERROR
+						},
 						payload: {
 							error
 						}
@@ -64,37 +80,20 @@ export function navigationError(error) {
 	};
 }
 
-export function searchRepos(topic) {
-	let meta = {};
-	if (topic) {
-		meta.analytics = {
-			event: 'search-repo',
-			value: topic 
-		};
-	}
-
-	return ajaxAction({
-		type: actionTypes.SEARCH_REPOS,
-		meta,
-		fetchOperation: () => getTrendingRepos(topic),
-		successPayload: (data) => ({ repos: data.items })
-	});
-
-}
-
-export function repoDetails(repoName) {
-	return ajaxAction({
-		type: actionTypes.REPO_DETAILS,
-		fetchOperation: () => getRepoDetails(repoName),
-		successPayload: (data) => ({ repoDetails: data })
-	});
-	
+export function loadMoviesList() {
+  return (dispatch, getState) => {
+    return ajaxAction({
+      type: actionTypes.LOAD_MOVIES_LIST,
+      fetchOperation: () => moviesLoaderMap(getState().moviesFilter()),
+      successPayload: data => ({ movies: data.results })
+    });
+  };
 }
 
 export function loadTopRated() {
   return ajaxAction({
     type: actionTypes.TOP_RATED_MOVIES,
-    fetchOperation: () => getTopRated(),
+    fetchOperation: () => tmdb.getTopRated(),
     successPayload: data => ({ movies: data.results })
   });
 }
@@ -102,7 +101,7 @@ export function loadTopRated() {
 export function loadMovieDetails(movieId) {
   return ajaxAction({
     type: actionTypes.MOVIE_DETAILS,
-    fetchOperation: () => getMovieDetails(movieId),
+    fetchOperation: () => tmdb.getMovieDetails(movieId),
     successPayload: data => ({ details: data })
   });
 }
