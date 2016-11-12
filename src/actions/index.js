@@ -23,17 +23,16 @@ const moviesLoaderMap = {
 		}
 */
 function ajaxAction(config) {
-	return dispatch => {
+	return (dispatch, getState) => {
 		dispatch({
 			type: config.type,
 			meta: Object.assign({
-				action: config.type,
 				ajaxStatus: constants.AJAX_STATUS_REQUEST
 			}, config.meta)
 		});
 
 		return new Promise((resolve, reject) => {		
-			config.fetchOperation()
+			config.fetchOperation(getState())
 				.then(data => {
 					dispatch({
 						type: config.type,
@@ -60,14 +59,12 @@ function ajaxAction(config) {
 	};
 }
 
-export function loadMoviesList() {
-  return (dispatch, getState) => {
-    return ajaxAction({
-      type: actionTypes.LOAD_MOVIES_LIST,
-      fetchOperation: () => moviesLoaderMap(getState().moviesFilter()),
-      successPayload: data => ({ movies: data.results })
-    });
-  };
+export function loadMoviesList(filter = constants.MOVIES_FILTER_PREMIER) {
+  return ajaxAction({
+    type: actionTypes.LOAD_MOVIES_LIST,
+    fetchOperation: () => moviesLoaderMap[filter](),
+    successPayload: data => ({ movies: data.results, filter })
+  });
 }
 
 export function loadTopRated() {
@@ -82,6 +79,10 @@ export function loadMovieDetails(movieId) {
   return ajaxAction({
     type: actionTypes.MOVIE_DETAILS,
     fetchOperation: () => tmdb.getMovieDetails(movieId),
-    successPayload: data => ({ details: data })
+    successPayload: data => {
+      let details = data;
+      details.videos = details.videos.results.length ? details.videos.results : [];
+      return { details };
+    }
   });
 }

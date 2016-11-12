@@ -7,6 +7,7 @@ export const SEARCH_REPOS = 'SEARCH_REPOS';
 
 export const REPO_DETAILS = 'REPO_DETAILS';
 
+export const LOAD_MOVIES_LIST = 'LOAD_MOVIES_LIST';
 export const TOP_RATED_MOVIES = 'TOP_RATED_MOVIES';
 
 export const MOVIE_DETAILS = 'MOVIE_DETAILS';
