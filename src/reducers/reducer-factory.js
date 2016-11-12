@@ -1,3 +1,4 @@
+import NProgress from 'nprogress';
 import * as constants from '../constants';
 
 class ReducerFactory {
@@ -16,17 +17,16 @@ class ReducerFactory {
 			switch(action.meta.ajaxStatus) {
           case constants.AJAX_STATUS_REQUEST:
             state.isLoading = true;
-            console.info('Show loading...');
+            NProgress.start();
             break;
           case constants.AJAX_STATUS_SUCCESS:
             state.isLoading = false;
-            console.info('Hide loading...');
             state = actionHandler(action, state);
-            console.log('Navigation action executed.');
+            NProgress.done();
             break;
           case constants.AJAX_STATUS_ERROR:
-            console.info('Hide loading...');
             state.isLoading = false;
+            NProgress.done();
             break;
       }
       return state;

@@ -49,7 +49,12 @@ simpleReducerFactory.handleNavigationAction(actionTypes.TOP_RATED_MOVIES, (actio
 });
 
 
-simpleReducerFactory.handleAction(actionTypes.MOVIE_DETAILS, (action, state) => {
+// simpleReducerFactory.handleAction(actionTypes.MOVIE_DETAILS, (action, state) => {
+// 	state.movieDetails = action.payload.details;
+// 	return state;
+// });
+
+simpleReducerFactory.handleNavigationAction(actionTypes.MOVIE_DETAILS, (action, state) => {
 	state.movieDetails = action.payload.details;
 	return state;
 });

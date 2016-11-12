@@ -1,4 +1,7 @@
 import lscache from 'lscache';
+import Logdown from 'logdown';
+
+const logger = new Logdown({prefix: 'ajax'});
 
 let _xmlParser,
 	jsonpCallbackId = 0,
@@ -58,7 +61,7 @@ function parseText(res) {
 function cacheResponse(ttl, key) {
 	return (data) => {
 		if (ttl) {
-			console.log('Ajax::cacheResponse# Caching response with key:', key, 'for', ttl, 'minutes.');
+			logger.log('Ajax::cacheResponse# Caching response with key:', key, 'for', ttl, 'minutes.');
 			lscache.set(data.url, data.result, ttl); // Last parameter is TTL in minutes
 		}
 		return data.result;

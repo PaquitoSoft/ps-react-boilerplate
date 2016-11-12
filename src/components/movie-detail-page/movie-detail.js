@@ -1,8 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Logdown from 'logdown';
 import { loadMovieDetails } from '../../actions/';
 
 import './movie-detail.css';
+
+const logger = new Logdown({prefix: 'MovieDetailPage'});
 
 function MovieDetailPage({ movie }) {
   // movie.genres[0].name
@@ -30,8 +33,12 @@ function MovieDetailPage({ movie }) {
 }
 
 MovieDetailPage.navigationAction = function(requestContext) {
-  console.log('MovieDetailPage::navigationAction:', requestContext);
+  logger.log('MovieDetailPage::navigationAction:', requestContext);
   return loadMovieDetails(requestContext.routeParams.movieId);
+};
+
+MovieDetailPage.propTypes = {
+  movie: React.PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {

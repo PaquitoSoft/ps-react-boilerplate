@@ -1,11 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Logdown from 'logdown';
 import { loadMoviesList, loadTopRated } from '../../actions/';
 
 import MovieSummary from './movie-summary';
 
+const logger = new Logdown({prefix: 'HomePage'});
+
 function HomePage({ movies }) {
-  console.log('Rendering HomePage component...');
   return (
     <div className="home-page">
       <div className="ui four column grid">
@@ -18,10 +20,15 @@ function HomePage({ movies }) {
 }
 
 HomePage.navigationAction = function(requestContext) {
-  console.log('HomePage::navigationAction:', requestContext);
+  logger.log('HomePage::navigationAction:', requestContext);
   // return loadMoviesList();
   return loadTopRated();
 };
+
+HomePage.propTypes = {
+  movies: React.PropTypes.array.isRequired
+};
+
 
 function mapStateToProps(state) {
   return {

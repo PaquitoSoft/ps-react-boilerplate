@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 
 import Header from './layout/header';
 import Footer from './layout/footer';
@@ -7,7 +6,6 @@ import Footer from './layout/footer';
 import './app.css';
 
 function App({ children }) {
-  // TODO Loader (see small-shop-react)
   return (
     <div className="app-root">
       <Header />
@@ -19,10 +17,8 @@ function App({ children }) {
   );
 }
 
-function mapStateToProps(state) {
-	return {
-		isLoading: state.isLoading
-	};
-}
+App.propTypes = {
+  children: React.PropTypes.object.isRequired
+};
 
-export default connect(mapStateToProps)(App);
+export default App;

@@ -1,6 +1,5 @@
 import * as actionTypes from './types';
 import * as constants from '../constants';
-// import { getTrendingRepos, getRepoDetails } from '../api/github';
 import * as tmdb from '../api/tmdb';
 
 export const MOVIES_FILTER_TOP_RATED = 'MOVIES_FILTER_TOP_RATED';
@@ -26,7 +25,7 @@ const moviesLoaderMap = {
 function ajaxAction(config) {
 	return dispatch => {
 		dispatch({
-			type: actionTypes.AJAX_REQUEST,
+			type: config.type,
 			meta: Object.assign({
 				action: config.type,
 				ajaxStatus: constants.AJAX_STATUS_REQUEST
@@ -47,7 +46,7 @@ function ajaxAction(config) {
 				})
 				.catch(error => {
 					dispatch({
-						type: actionTypes.AJAX_ERROR,
+						type: config.type,
 						meta: {
 							ajaxStatus: constants.AJAX_STATUS_ERROR
 						},
@@ -58,25 +57,6 @@ function ajaxAction(config) {
 					reject(error);
 				});
 		});
-	};
-}
-
-export function navigationStart() {
-	return {
-		type: actionTypes.AJAX_REQUEST
-	};
-}
-
-export function navigationSuccess() {
-	return {
-		type: actionTypes.AJAX_SUCCESS
-	};
-}
-
-export function navigationError(error) {
-	return {
-		type: actionTypes.AJAX_ERROR,
-		payload: { error }
 	};
 }
 

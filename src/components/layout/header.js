@@ -1,9 +1,9 @@
 import React from 'react';
-import * as rr from 'react-redux';
 import { Link } from 'react-router';
 // import { filterMovies } from '../../actions/';
 
 import './header.css';
+import './nprogress.css';
 import logo from './logo.png';
 
 function createMoviesFilter(filterValue, filterName) {

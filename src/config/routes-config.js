@@ -1,25 +1,22 @@
+import Logdown from 'logdown';
 import App from '../components/app';
 
-// export default Object.freeze({
-// 	// Route:page-component-path (Base path: /src/js/)
-// 	'/': 'components/home-page/home-page',
-// 	'/repo/:repoName': 'containers/detail-page/detail-page'
-// });
-
+const logger = new Logdown({prefix: 'RoutesConfig'});
 
 function createRouteConfig(path, componentPath, store) {
   return {
     path,
     dispatch: store.dispatch,
     getComponent(nextState, done) {
-      console.log('Loading component:', componentPath);
+      logger.log('Loading component:', componentPath);
       require.ensure([], require => { // eslint-disable-line
         const Component = require(`../components/${componentPath}`).default;
 
+        // TODO Load not only component but all its related assets
         // const actions = [];
         // const reducer = (state) => state;
         // injectReducer(store, { movies: reducer });
-        console.info('---> Component loaded:', componentPath, nextState);
+        logger.info('---> Component loaded:', componentPath, nextState);
         
         const requestContext = {
           routeParams: nextState.params,
@@ -27,44 +24,32 @@ function createRouteConfig(path, componentPath, store) {
           hash: nextState.location.hash
         };
         
-        // this.navigationAction = Component.navigationAction;
-        // done(null, Component);
         store.dispatch(Component.navigationAction(requestContext))
           .then(() => {
-            console.info('Action dispatched. Rendering component...', componentPath);
-            done(null, Component)
+            logger.info('Action dispatched. Rendering component...', componentPath);
+            done(null, Component);
           })
           .catch(err => {
-            console.error('RoutesConfig::getComponent# Error dispatching navigation action:', err);
-            console.log(err.stack);
+            logger.error('RoutesConfig::getComponent# Error dispatching navigation action:', err);
+            logger.log(err.stack);
           });
       });
     },
-    onEnter(nextState, replace, callback) {
-      console.info(`${componentPath} onEnter: ${nextState}`);
-      const requestContext = {
-        routeParams: nextState.params,
-        queryStringParams: nextState.location.query,
-        hash: nextState.location.hash
-      };
-      
-      // this.dispatch(this.navigationAction(requestContext))
-      //   .then(callback)
-      //   .catch(callback);
-      callback();
+    onEnter(nextState/*, replace, callback*/) {
+      logger.info(`${componentPath} onEnter: ${nextState}`);
+      document.body.scrollTop = 0;
     },
-    onChange(prevState, nextState, replace, callback){
-      console.info(`${componentPath} onChange: ${prevState} - ${nextState}`);
-      callback();
-    },
-    onLeave(prevState) {
-      console.info(`${componentPath} onLeave: ${prevState}`);
-    }
+    // onChange(prevState, nextState, replace, callback){
+    //   logger.info(`${componentPath} onChange: ${prevState} - ${nextState}`);
+    //   callback();
+    // },
+    // onLeave(prevState) {
+    //   logger.info(`${componentPath} onLeave: ${prevState}`);
+    // }
   };
 }
 
 export function getRoutes(store) {
-  console.info('====> Creating routes configuration...');
   return {
 		component: App,
 		childRoutes: [
